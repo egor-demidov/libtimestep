@@ -1,0 +1,12 @@
+*
+
+!CMakeLists.txt
+!.gitmodules
+!.gitignore
+!*.cpp
+!*.h
+!include/
+!include/**
+!test/
+!test/**
+!readme.md
