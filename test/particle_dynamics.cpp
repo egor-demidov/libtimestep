@@ -16,16 +16,16 @@
 #include "write_vtk.h"
 #include "compute_energy.h"
 
-class System {
+class binary_system {
 public:
     // k - stiffness constant
     // g - attraction constant
     // r - particle radius
     // m - particle mass
     // gamma_c - visco-elastic damping
-    System(double k, double g, double r, double m, double gamma_c) : k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
+    binary_system(double k, double g, double r, double m, double gamma_c) : k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
 
-    System(System const &) = delete;
+    binary_system(binary_system const &) = delete;
 
     void operator() (std::vector<Eigen::Vector3d>::const_iterator x_begin,
                      std::vector<Eigen::Vector3d>::const_iterator x_end,
@@ -119,8 +119,8 @@ int main() {
     v.resize(x.size(), Eigen::Vector3d::Zero());
     a.resize(x.size(), Eigen::Vector3d::Zero());
 
-    System system(k, g, r_part, m, gamma_c);
-    velocity_verlet_half<std::vector<Eigen::Vector3d>, Eigen::Vector3d, double, System>
+    binary_system system(k, g, r_part, m, gamma_c);
+    velocity_verlet_half<std::vector<Eigen::Vector3d>, Eigen::Vector3d, double, binary_system>
             integrator(system, 0.0, x.begin(), x.end(), v.begin(), a.begin());
 
     std::vector<std::vector<Eigen::Vector3d>> solution_buffer;

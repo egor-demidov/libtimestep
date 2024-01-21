@@ -65,9 +65,9 @@ The mathematical system is represented by a functor, i.e. an object that overloa
 `operator ()` and can behave as a function, but also has a constructor and member variables.
 The functor that can represent our system can look like this:
 ```c++
-class System {
+class binary_system {
 public:
-    System(double m, double k, double gamma_d) :
+    binary_system(double m, double k, double gamma_d) :
         m(m), k(k), gamma_d(gamma_d) {}
     
     void oprator (std::vector<double>::const_iterator x_begin,
@@ -111,8 +111,8 @@ We also initialized a container for accelerations. While the value that we store
 it will not be used in the simulation, it is a buffer that will be used by the integrator
 internally. Then, let's instantiate the system and the integrator:
 ```c++
-System system(m, k, gamma_d); // System object must exist for the storage duration of forward_euler
-forward_euler<std::vector<double>, double, double, System> integrator(system, 0.0, x.begin(), x.end(), v.begin(), a.begin());
+binary_system system(m, k, gamma_d); // binary_system object must exist for the storage duration of forward_euler
+forward_euler<std::vector<double>, double, double, binary_system> integrator(system, 0.0, x.begin(), x.end(), v.begin(), a.begin());
 ```
 Now we are ready to do the time-stepping and solve the system numerically. Since we want to store the solution at every
 time step, let us create buffers to store `t` and `x` values.

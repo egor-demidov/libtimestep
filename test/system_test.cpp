@@ -16,14 +16,14 @@
 #include "compute_energy.h"
 #include "write_vtk.h"
 
-// WARNING: care must be taken when using state buffers in your implementation of System
+// WARNING: care must be taken when using state buffers in your implementation of binary_system
 // because compute_acceleration() may be a part of a parallel call chain
-class GranularSystem : public System<Eigen::Vector3d, double, velocity_verlet_half, step_handler> {
+class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler> {
 public:
     GranularSystem(double k, double g, double r, double m, double gamma_c,
                    std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0) :
-        System<Eigen::Vector3d, double, velocity_verlet_half, step_handler>(std::move(x0), std::move(v0), t0, Eigen::Vector3d::Zero(), 0.0),
-                k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
+            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler>(std::move(x0), std::move(v0), t0, Eigen::Vector3d::Zero(), 0.0),
+            k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
 
     Eigen::Vector3d compute_acceleration(size_t i, size_t j, double t [[maybe_unused]]) override {
         auto const & xi = get_x()[i];
