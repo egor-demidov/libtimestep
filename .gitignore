@@ -9,4 +9,8 @@
 !include/**
 !test/
 !test/**
-!readme.md
+!README.md
+!.github/
+!.github/**
+
+test/deps
