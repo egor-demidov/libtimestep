@@ -26,7 +26,8 @@ template <
         template <
             typename _field_container_t,
             typename _field_value_t>
-        typename step_handler_t>
+        typename step_handler_t,
+        typename functor_t>
 class rotational_generic_system {
 public:
     typedef std::vector<field_value_t> field_container_t;
@@ -35,10 +36,10 @@ public:
     // The containers cannot be resized after the integrator has been instantiated because that would
     // invalidate the iterators
     rotational_generic_system(field_container_t x0, field_container_t v0, field_container_t theta0, field_container_t omega0,
-                     real_t t0, field_value_t field_zero, real_t real_zero) :
+                     real_t t0, field_value_t field_zero, real_t real_zero, functor_t & functor_ref) :
             field_zero(std::move(field_zero)), real_zero(real_zero), x(std::move(x0)), v(std::move(v0)), a(x.size()),
             theta(std::move(theta0)), omega(std::move(omega0)), alpha(x.size()),
-            integrator(*this, t0, std::begin(this->x), std::end(this->x),
+            integrator(functor_ref, t0, std::begin(this->x), std::end(this->x),
                        std::begin(this->v), std::begin(this->a),
                        std::begin(this->theta), std::begin(this->omega), std::begin(this->alpha),
                        step_handler_t<field_container_t, field_value_t>(std::begin(this->x),
@@ -62,16 +63,6 @@ public:
         std::fill(std::begin(a), std::end(a), field_zero);
         std::fill(std::begin(alpha), std::end(alpha), field_zero);
     }
-
-    // This method is called by the integrator to compute accelerations
-    virtual void operator() (typename field_container_t::const_iterator x_begin [[maybe_unused]],
-                     typename field_container_t::const_iterator x_end [[maybe_unused]],
-                     typename field_container_t::const_iterator v_begin [[maybe_unused]],
-                     typename field_container_t::iterator a_begin [[maybe_unused]],
-                     typename field_container_t::const_iterator theta_begin [[maybe_unused]],
-                     typename field_container_t::const_iterator omega_begin [[maybe_unused]],
-                     typename field_container_t::iterator alpha_begin [[maybe_unused]],
-                     real_t t) = 0;
 
     // This method is called from the driver program  to perform one time step of size dt
     void do_step(real_t dt) {
@@ -104,7 +95,7 @@ protected:
 
     index_container_t indices;
     field_container_t x, v, a, theta, omega, alpha;
-    integrator_t<field_container_t, field_value_t, real_t, rotational_generic_system, step_handler_t> integrator;
+    integrator_t<field_container_t, field_value_t, real_t, functor_t, step_handler_t> integrator;
 };
 
 #include "rotational_binary_system.h"

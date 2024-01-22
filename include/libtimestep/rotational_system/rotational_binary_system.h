@@ -22,7 +22,7 @@ template <
         typename _field_container_t,
         typename _field_value_t>
     typename step_handler_t>
-class rotational_binary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t> {
+class rotational_binary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_binary_system<field_value_t, real_t, integrator_t, step_handler_t>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
@@ -30,11 +30,11 @@ public:
     rotational_binary_system(field_container_t x0, field_container_t v0,
                              field_container_t theta0, field_container_t omega0,
                              real_t t0, field_value_t field_zero, real_t real_zero) :
-            rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t>(std::move(x0),
+            rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_binary_system>(std::move(x0),
                                                                                            std::move(v0),
                                                                                            std::move(theta0),
                                                                                            std::move(omega0),
-                                                                                           t0, field_zero, real_zero) {}
+                                                                                           t0, field_zero, real_zero, *this) {}
 
     // This method should compute the acceleration of particle i due to its interaction with particle j and return it
     virtual std::pair<field_value_t, field_value_t> compute_accelerations(size_t i, size_t j, real_t t) = 0;
@@ -47,7 +47,7 @@ public:
                      typename field_container_t::const_iterator theta_begin [[maybe_unused]],
                      typename field_container_t::const_iterator omega_begin [[maybe_unused]],
                      typename field_container_t::iterator alpha_begin [[maybe_unused]],
-                     real_t t) override {
+                     real_t t) {
 
         this->reset_acceleration_buffers();
 
