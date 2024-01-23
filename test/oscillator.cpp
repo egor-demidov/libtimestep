@@ -12,14 +12,14 @@
 #include <libtimestep/system/system.h>
 
 // Implement a unary second-order system
-class OscillatorSystem : public unary_system<double, double, forward_euler, step_handler> {
+class OscillatorSystem : public unary_system<double, double, forward_euler, step_handler, OscillatorSystem> {
 public:
     OscillatorSystem(double k, double m, double gamma_d,
                      std::vector<double> x0, std::vector<double> v0, double t0) :
-            unary_system<double, double, forward_euler, step_handler>(std::move(x0), std::move(v0), t0, 0.0, 0.0),
+            unary_system<double, double, forward_euler, step_handler, OscillatorSystem>(std::move(x0), std::move(v0), t0, 0.0, 0.0, *this),
             k(k), m(m), gamma_d(gamma_d) {}
 
-    double compute_acceleration(size_t i, double t [[maybe_unused]]) override {
+    double compute_acceleration(size_t i, double t [[maybe_unused]]) {
         auto const & x_i = this->get_x()[i];
         auto const & v_i = this->get_v()[i];
 

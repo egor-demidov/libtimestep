@@ -16,17 +16,17 @@
 #include "compute_energy.h"
 #include "write_vtk.h"
 
-class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler> {
+class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem> {
 public:
     RotationalGranularSystem(double k, double g, double r, double m, double gamma_c,
                              std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0,
                              std::vector<Eigen::Vector3d> theta0, std::vector<Eigen::Vector3d> omega0, double t0) :
-            rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler>(std::move(x0), std::move(v0),
+            rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem>(std::move(x0), std::move(v0),
                                                                             std::move(theta0), std::move(omega0),
-                                                                            t0, Eigen::Vector3d::Zero(), 0.0),
+                                                                            t0, Eigen::Vector3d::Zero(), 0.0, *this),
                                                                             k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
 
-    std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i, size_t j, double t [[maybe_unused]]) override {
+    std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i, size_t j, double t [[maybe_unused]]) {
         auto const & xi = get_x()[i];
         auto const & xj = get_x()[j];
         auto const & vi = get_v()[i];

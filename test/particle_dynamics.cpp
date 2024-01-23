@@ -20,16 +20,16 @@
 // NOTE: this could have also been implemented in a unary system, but the binary system interface uses
 // multithreading and will be faster for larger systems
 // Here Velocity Verlet integration scheme because it leads to more stable particulate simulations
-class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler> {
+class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem> {
 public:
     GranularSystem(double k, double m, double g, double gamma_c, double r_part,
                    std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0) :
-            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler>(std::move(x0), std::move(v0),
-                                                                                       t0, Eigen::Vector3d::Zero(), 0.0),
+            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem>(std::move(x0), std::move(v0),
+                                                                                       t0, Eigen::Vector3d::Zero(), 0.0, *this),
                     k(k), m(m), g(g), gamma_c(gamma_c), r_part(r_part) {}
 
     // Compute the acceleration of particle i due to its interaction with particle j
-    Eigen::Vector3d compute_acceleration(size_t i, size_t j, double t [[maybe_unused]]) override {
+    Eigen::Vector3d compute_acceleration(size_t i, size_t j, double t [[maybe_unused]]) {
         auto const & x_i = this->get_x()[i];
         auto const & x_j = this->get_x()[j];
         auto const & v_i = this->get_v()[i];

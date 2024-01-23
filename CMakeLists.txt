@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (${CMAKE_COMPILER_IS_GNUCXX})
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -O2 -flto=auto ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3 -flto=auto ${CMAKE_CXX_FLAGS}")
 endif ()
 
 include_directories(test/deps/eigen)
