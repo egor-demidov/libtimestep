@@ -23,14 +23,16 @@ template <
     typename _field_value_t>
     typename step_handler_t,
     typename acceleration_handler_t>
-class binary_system : public generic_system<field_value_t, real_t, integrator_t, step_handler_t, binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
+class binary_system : public generic_system<field_value_t, real_t, integrator_t, step_handler_t,
+        binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
 
     // The containers cannot be resized after the integrator has been instantiated because that would
     // invalidate the iterators
-    binary_system(field_container_t x0, field_container_t v0, real_t t0, field_value_t field_zero, real_t real_zero, acceleration_handler_t & acceleration_handler) :
+    binary_system(field_container_t x0, field_container_t v0, real_t t0, field_value_t field_zero, real_t real_zero,
+                  acceleration_handler_t & acceleration_handler) :
             generic_system<field_value_t, real_t, integrator_t, step_handler_t, binary_system>(std::move(x0),
                                                                                 std::move(v0),
                                                                                 t0,
@@ -51,7 +53,7 @@ public:
                 if (i == j)
                     return;
 
-                this->a[i] += acceleration_handler.compute_acceleration(i, j, t);
+                this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);
             });
         });
     }

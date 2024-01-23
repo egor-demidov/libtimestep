@@ -26,11 +26,16 @@ public:
                                                                             t0, Eigen::Vector3d::Zero(), 0.0, *this),
                                                                             k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
 
-    std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i, size_t j, double t [[maybe_unused]]) {
-        auto const & xi = get_x()[i];
-        auto const & xj = get_x()[j];
-        auto const & vi = get_v()[i];
-        auto const & vj = get_v()[j];
+    std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i, size_t j,
+                                                                      std::vector<Eigen::Vector3d> const & x,
+                                                                      std::vector<Eigen::Vector3d> const & v,
+                                                                      std::vector<Eigen::Vector3d> const & theta [[maybe_unused]],
+                                                                      std::vector<Eigen::Vector3d> const & omega [[maybe_unused]],
+                                                                      double t [[maybe_unused]]) {
+        auto const & xi = x[i];
+        auto const & xj = x[j];
+        auto const & vi = v[i];
+        auto const & vj = v[j];
 
         auto [ai1, alphai1] = compute_elasticity(xi, xj, vi, vj);
         auto [ai2, alphai2] = compute_attraction(xi, xj);

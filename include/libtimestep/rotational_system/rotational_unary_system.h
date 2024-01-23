@@ -23,7 +23,8 @@ template <
         typename _field_value_t>
     typename step_handler_t,
     typename acceleration_handler_t>
-class rotational_unary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_unary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
+class rotational_unary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t,
+        rotational_unary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
@@ -51,7 +52,7 @@ public:
         this->reset_acceleration_buffers();
 
         std::for_each(this->indices.begin(), this->indices.end(), [t, this] (size_t i) {
-            auto [a_i, alpha_i] = acceleration_handler.compute_acceleration(i, t);
+            auto [a_i, alpha_i] = acceleration_handler.compute_acceleration(i, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);
             this->a[i] += a_i;
             this->alpha[i] += alpha_i;
         });

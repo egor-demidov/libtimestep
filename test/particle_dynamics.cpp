@@ -29,11 +29,14 @@ public:
                     k(k), m(m), g(g), gamma_c(gamma_c), r_part(r_part) {}
 
     // Compute the acceleration of particle i due to its interaction with particle j
-    Eigen::Vector3d compute_acceleration(size_t i, size_t j, double t [[maybe_unused]]) {
-        auto const & x_i = this->get_x()[i];
-        auto const & x_j = this->get_x()[j];
-        auto const & v_i = this->get_v()[i];
-        auto const & v_j = this->get_v()[j];
+    Eigen::Vector3d compute_acceleration(size_t i, size_t j,
+                                         std::vector<Eigen::Vector3d> const & x,
+                                         std::vector<Eigen::Vector3d> const & v,
+                                         double t [[maybe_unused]]) {
+        auto const & x_i = this->x[i];
+        auto const & x_j = this->x[j];
+        auto const & v_i = this->v[i];
+        auto const & v_j = this->v[j];
 
         return (compute_elasticity(x_i, x_j, v_i, v_j) + compute_attraction(x_i, x_j)) / m;
     }
