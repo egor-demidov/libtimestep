@@ -89,6 +89,16 @@ public:
         return this->omega;
     }
 
+    // Getter for step handler
+    [[nodiscard]] step_handler_t<field_container_t, field_value_t> & get_step_handler() {
+        return integrator.step_handler;
+    }
+
+    // Const getter for step handler
+    [[nodiscard]] step_handler_t<field_container_t, field_value_t> const & get_step_handler() const {
+        return integrator.step_handler;
+    }
+
 protected:
     const field_value_t field_zero;
     const real_t real_zero;

@@ -36,6 +36,8 @@ public:
 
     virtual void do_step(real_t dt) = 0;
 
+    step_handler_t<field_container_t, field_value_t> step_handler;
+
 protected:
     void update_acceleration() const {
         // Create const iterators for field arrays that are not supposed to be modified by the acceleration functor
@@ -50,7 +52,6 @@ protected:
     real_t t;
     typename field_container_t::iterator x_begin_itr, x_end_itr, v_begin_itr, a_begin_itr;
     functor_t & acceleration_functor;
-    step_handler_t<field_container_t, field_value_t> step_handler;
 };
 
 #include "forward_euler.h"
