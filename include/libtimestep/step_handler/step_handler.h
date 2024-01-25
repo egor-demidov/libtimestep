@@ -9,7 +9,6 @@
 
 template <typename field_container_t, typename field_value_t>
 struct step_handler {
-public:
     void increment_x(size_t n, field_value_t const & x, typename field_container_t::iterator x_begin_itr) const {
         *(x_begin_itr + n) += x;
     }
