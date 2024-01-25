@@ -10,11 +10,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (${CMAKE_COMPILER_IS_GNUCXX})
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3 -flto=auto ${CMAKE_CXX_FLAGS}")
+elseif (${APPLE})
+    set(CMAKE_CXX_FLAGS "-stdlib=libc++ -Wall -Wextra -Werror -O3 -flto=auto ${CMAKE_CXX_FLAGS}")
 endif ()
 
 include_directories(test/deps/eigen)
 
 #add_subdirectory(test/deps/matplotplusplus)
+set(CMAKE_FIND_DEBUG_MODE ON)
 
 # GNU libstdc++ uses libtbb to implement C++ 17 parallel functionality
 if (${CMAKE_COMPILER_IS_GNUCXX})
