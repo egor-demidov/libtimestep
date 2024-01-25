@@ -45,8 +45,8 @@ public:
                 field_value_t & omega = *(this->omega_begin_itr + n);
                 field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
-                this->step_handler.increment_v(n, -a * dt / 2.0, this->v_begin_itr);
-                this->step_handler.increment_omega(n, -alpha * dt / 2.0, this->omega_begin_itr);
+                this->step_handler.increment_v(n, -a * dt / 2.0, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
+                this->step_handler.increment_omega(n, -alpha * dt / 2.0, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
             }
 
             this->update_acceleration();
@@ -61,10 +61,10 @@ public:
             field_value_t & omega = *(this->omega_begin_itr + n);
             field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
-            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
-            this->step_handler.increment_x(n, v*dt, this->x_begin_itr);
-            this->step_handler.increment_omega(n, alpha*dt, this->omega_begin_itr);
-            this->step_handler.increment_theta(n, omega*dt, this->theta_begin_itr);
+            this->step_handler.increment_v(n, a*dt, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
+            this->step_handler.increment_x(n, v*dt, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
+            this->step_handler.increment_omega(n, alpha*dt, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
+            this->step_handler.increment_theta(n, omega*dt, this->x_begin_itr, this->v_begin_itr, this->theta_begin_itr, this->omega_begin_itr);
         }
 
         this->update_acceleration();

@@ -37,8 +37,8 @@ public:
             field_value_t const & v = *(this->v_begin_itr + n);
             field_value_t const & a = *(this->a_begin_itr + n);
 
-            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt, this->x_begin_itr);
-            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
+            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt, this->x_begin_itr, this->v_begin_itr);
+            this->step_handler.increment_v(n, a*dt, this->x_begin_itr, this->v_begin_itr);
         }
     }
 };
