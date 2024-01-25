@@ -23,7 +23,7 @@ public:
                              std::vector<Eigen::Vector3d> theta0, std::vector<Eigen::Vector3d> omega0, double t0) :
             rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem>(std::move(x0), std::move(v0),
                                                                             std::move(theta0), std::move(omega0),
-                                                                            t0, Eigen::Vector3d::Zero(), 0.0, *this),
+                                                                            t0, Eigen::Vector3d::Zero(), 0.0, *this, step_handler_instance),
                                                                             k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}
 
     std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i, size_t j,
@@ -66,6 +66,8 @@ private:
     }
 
     const double k, g, r, m, gamma_c;
+
+    rotational_step_handler<std::vector<Eigen::Vector3d>, Eigen::Vector3d> step_handler_instance;
 };
 
 bool do_overlap(std::vector<Eigen::Vector3d> const & particles, Eigen::Vector3d const & x, double r_part) {

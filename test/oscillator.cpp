@@ -16,7 +16,7 @@ class OscillatorSystem : public unary_system<double, double, forward_euler, step
 public:
     OscillatorSystem(double k, double m, double gamma_d,
                      std::vector<double> x0, std::vector<double> v0, double t0) :
-            unary_system<double, double, forward_euler, step_handler, OscillatorSystem>(std::move(x0), std::move(v0), t0, 0.0, 0.0, *this),
+            unary_system<double, double, forward_euler, step_handler, OscillatorSystem>(std::move(x0), std::move(v0), t0, 0.0, 0.0, *this, step_handler_instance),
             k(k), m(m), gamma_d(gamma_d) {}
 
     double compute_acceleration(size_t i,
@@ -30,6 +30,7 @@ public:
     }
 
 private:
+    step_handler<std::vector<double>, double> step_handler_instance;
     const double k, m, gamma_d;
 };
 

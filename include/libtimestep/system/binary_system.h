@@ -32,12 +32,12 @@ public:
     // The containers cannot be resized after the integrator has been instantiated because that would
     // invalidate the iterators
     binary_system(field_container_t x0, field_container_t v0, real_t t0, field_value_t field_zero, real_t real_zero,
-                  acceleration_handler_t & acceleration_handler) :
+                  acceleration_handler_t & acceleration_handler, step_handler_t<field_container_t, field_value_t> & step_handler) :
             generic_system<field_value_t, real_t, integrator_t, step_handler_t, binary_system>(std::move(x0),
                                                                                 std::move(v0),
                                                                                 t0,
                                                                                 field_zero,
-                                                                                real_zero, *this), acceleration_handler(acceleration_handler) {}
+                                                                                real_zero, *this, step_handler), acceleration_handler(acceleration_handler) {}
 
     // This method is called by the integrator to compute accelerations
     void operator() (typename field_container_t::const_iterator x_begin [[maybe_unused]],

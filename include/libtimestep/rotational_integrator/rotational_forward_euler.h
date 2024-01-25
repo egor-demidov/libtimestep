@@ -25,9 +25,9 @@ public:
                   typename field_container_t::iterator theta_begin,
                   typename field_container_t::iterator omega_begin,
                   typename field_container_t::iterator alpha_begin,
-                  step_handler_t<field_container_t, field_value_t> step_handler) :
+                  step_handler_t<field_container_t, field_value_t> & step_handler) :
             rotational_integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0,
-                                   x_begin, x_end, v_begin, a_begin, theta_begin, omega_begin, alpha_begin, std::move(step_handler)) {}
+                                   x_begin, x_end, v_begin, a_begin, theta_begin, omega_begin, alpha_begin, step_handler) {}
 
     void do_step(real_t dt) override {
         // Re-compute the acceleration
@@ -43,10 +43,10 @@ public:
             field_value_t const & omega = *(this->omega_begin_itr + n);
             field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
-            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt);
-            this->step_handler.increment_v(n, a*dt);
-            this->step_handler.increment_theta(n, omega*dt + 0.5*alpha*dt*dt);
-            this->step_handler.increment_omega(n, alpha*dt);
+            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt, this->x_begin_itr);
+            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
+            this->step_handler.increment_theta(n, omega*dt + 0.5*alpha*dt*dt, this->theta_begin_itr);
+            this->step_handler.increment_omega(n, alpha*dt, this->omega_begin_itr);
         }
     }
 };

@@ -35,10 +35,11 @@ public:
 
     // The containers cannot be resized after the integrator has been instantiated because that would
     // invalidate the iterators
-    generic_system(field_container_t x0, field_container_t v0, real_t t0, field_value_t field_zero, real_t real_zero, functor_t & functor_ref) :
+    generic_system(field_container_t x0, field_container_t v0, real_t t0, field_value_t field_zero, real_t real_zero, functor_t & functor_ref,
+                   step_handler_t<field_container_t, field_value_t> & step_handler) :
             field_zero(std::move(field_zero)), real_zero(real_zero), x(std::move(x0)), v(std::move(v0)), a(x.size()),
             integrator(functor_ref, t0, std::begin(this->x), std::end(this->x),
-                       std::begin(this->v), std::begin(this->a), step_handler_t<field_container_t, field_value_t>(std::begin(this->x), std::begin(this->v))) {
+                       std::begin(this->v), std::begin(this->a), step_handler) {
 
         // Assert that x and v buffers are of the same size
         if (x.size() != v.size())

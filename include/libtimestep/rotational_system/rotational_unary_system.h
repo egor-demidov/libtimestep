@@ -31,12 +31,13 @@ public:
 
     rotational_unary_system(field_container_t x0, field_container_t v0,
                              field_container_t theta0, field_container_t omega0,
-                             real_t t0, field_value_t field_zero, real_t real_zero, acceleration_handler_t & acceleration_handler) :
+                             real_t t0, field_value_t field_zero, real_t real_zero, acceleration_handler_t & acceleration_handler,
+                             step_handler_t<field_container_t, field_value_t> & step_handler) :
             rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_unary_system>(std::move(x0),
                                                                                            std::move(v0),
                                                                                            std::move(theta0),
                                                                                            std::move(omega0),
-                                                                                           t0, field_zero, real_zero, *this), acceleration_handler(acceleration_handler) {}
+                                                                                           t0, field_zero, real_zero, *this, step_handler), acceleration_handler(acceleration_handler) {}
 
 
     // This method is called by the integrator to compute accelerations

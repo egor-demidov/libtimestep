@@ -29,10 +29,10 @@ public:
                typename field_container_t::iterator theta_begin,
                typename field_container_t::iterator omega_begin,
                typename field_container_t::iterator alpha_begin,
-               step_handler_t<field_container_t, field_value_t> step_handler) :
+               step_handler_t<field_container_t, field_value_t> & step_handler) :
             t(t0), x_begin_itr(x_begin), x_end_itr(x_end), v_begin_itr(v_begin), a_begin_itr(a_begin),
             theta_begin_itr(theta_begin), omega_begin_itr(omega_begin),
-            alpha_begin_itr(alpha_begin), acceleration_functor(acceleration_functor), step_handler(std::move(step_handler)) {
+            alpha_begin_itr(alpha_begin), acceleration_functor(acceleration_functor), step_handler(step_handler) {
 
         static_assert(std::is_same<decltype(*x_begin), field_value_t &>::value,
                       "field_container_t must be a container of values of type field_value_t");
@@ -58,7 +58,7 @@ protected:
     typename field_container_t::iterator x_begin_itr, x_end_itr, v_begin_itr, a_begin_itr,
                             theta_begin_itr, omega_begin_itr, alpha_begin_itr;
     functor_t & acceleration_functor;
-    step_handler_t<field_container_t, field_value_t> step_handler;
+    step_handler_t<field_container_t, field_value_t> & step_handler;
 };
 
 #include "rotational_forward_euler.h"

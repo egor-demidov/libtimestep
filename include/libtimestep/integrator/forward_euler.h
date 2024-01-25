@@ -22,8 +22,8 @@ public:
                   typename field_container_t::iterator x_end,
                   typename field_container_t::iterator v_begin,
                   typename field_container_t::iterator a_begin,
-                  step_handler_t<field_container_t, field_value_t> step_handler) :
-            integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0, x_begin, x_end, v_begin, a_begin, std::move(step_handler)) {}
+                  step_handler_t<field_container_t, field_value_t> & step_handler) :
+            integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0, x_begin, x_end, v_begin, a_begin, step_handler) {}
 
     void do_step(real_t dt) override {
         // Re-compute the acceleration
@@ -37,8 +37,8 @@ public:
             field_value_t const & v = *(this->v_begin_itr + n);
             field_value_t const & a = *(this->a_begin_itr + n);
 
-            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt);
-            this->step_handler.increment_v(n, a*dt);
+            this->step_handler.increment_x(n, v*dt + 0.5*a*dt*dt, this->x_begin_itr);
+            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
         }
     }
 };

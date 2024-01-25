@@ -25,10 +25,10 @@ public:
                              typename field_container_t::iterator theta_begin,
                              typename field_container_t::iterator omega_begin,
                              typename field_container_t::iterator alpha_begin,
-                             step_handler_t<field_container_t, field_value_t> step_handler) :
+                             step_handler_t<field_container_t, field_value_t> & step_handler) :
             rotational_integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0,
                                                                                        x_begin, x_end, v_begin, a_begin, theta_begin, omega_begin, alpha_begin,
-                                                                                       std::move(step_handler)) {
+                                                                                       step_handler) {
 
         // Compute the accelerations
         this->update_acceleration();
@@ -45,8 +45,8 @@ public:
                 field_value_t & omega = *(this->omega_begin_itr + n);
                 field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
-                v -= a * dt / 2.0;
-                omega -= alpha / 2.0;
+                this->step_handler.increment_v(n, -a * dt / 2.0, this->v_begin_itr);
+                this->step_handler.increment_omega(n, -alpha * dt / 2.0, this->omega_begin_itr);
             }
 
             this->update_acceleration();
@@ -61,10 +61,10 @@ public:
             field_value_t & omega = *(this->omega_begin_itr + n);
             field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
-            v += a*dt;
-            x += v*dt;
-            omega += alpha*dt;
-            theta += omega*dt;
+            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
+            this->step_handler.increment_x(n, v*dt, this->x_begin_itr);
+            this->step_handler.increment_omega(n, alpha*dt, this->omega_begin_itr);
+            this->step_handler.increment_theta(n, omega*dt, this->theta_begin_itr);
         }
 
         this->update_acceleration();

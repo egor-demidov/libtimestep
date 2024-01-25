@@ -22,13 +22,13 @@ public:
                     typename field_container_t::iterator x_end,
                     typename field_container_t::iterator v_begin,
                     typename field_container_t::iterator a_begin,
-                    step_handler_t<field_container_t, field_value_t> step_handler) :
+                    step_handler_t<field_container_t, field_value_t> & step_handler) :
             integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0,
                                                                             x_begin,
                                                                             x_end,
                                                                             v_begin,
                                                                             a_begin,
-                                                                            std::move(step_handler)) {
+                                                                            step_handler) {
 
         // Compute the accelerations
         this->update_acceleration();
@@ -42,7 +42,7 @@ public:
             for (size_t n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
                 field_value_t const & a = *(this->a_begin_itr + n);
 
-                this->step_handler.increment_v(n, -a * dt / 2.0);
+                this->step_handler.increment_v(n, -a * dt / 2.0, this->v_begin_itr);
             }
 
             this->update_acceleration();
@@ -53,8 +53,8 @@ public:
             field_value_t const & v = *(this->v_begin_itr + n);
             field_value_t const & a = *(this->a_begin_itr + n);
 
-            this->step_handler.increment_v(n, a*dt);
-            this->step_handler.increment_x(n, v*dt);
+            this->step_handler.increment_v(n, a*dt, this->v_begin_itr);
+            this->step_handler.increment_x(n, v*dt, this->x_begin_itr);
         }
 
         this->update_acceleration();

@@ -25,7 +25,7 @@ public:
     GranularSystem(double k, double m, double g, double gamma_c, double r_part,
                    std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0) :
             binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem>(std::move(x0), std::move(v0),
-                                                                                       t0, Eigen::Vector3d::Zero(), 0.0, *this),
+                                                                                       t0, Eigen::Vector3d::Zero(), 0.0, *this, step_handler_instance),
                     k(k), m(m), g(g), gamma_c(gamma_c), r_part(r_part) {}
 
     // Compute the acceleration of particle i due to its interaction with particle j
@@ -64,6 +64,8 @@ private:
     }
 
     const double k, m, g, gamma_c, r_part;
+
+    step_handler<std::vector<Eigen::Vector3d>, Eigen::Vector3d> step_handler_instance;
 };
 
 bool do_overlap(std::vector<Eigen::Vector3d> const & particles, Eigen::Vector3d const & x, double r_part) {

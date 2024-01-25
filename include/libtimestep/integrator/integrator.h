@@ -26,9 +26,9 @@ public:
                typename field_container_t::iterator x_end,
                typename field_container_t::iterator v_begin,
                typename field_container_t::iterator a_begin,
-               step_handler_t<field_container_t, field_value_t> step_handler) :
+               step_handler_t<field_container_t, field_value_t> & step_handler) :
         t(t0), x_begin_itr(x_begin), x_end_itr(x_end), v_begin_itr(v_begin), a_begin_itr(a_begin),
-        acceleration_functor(acceleration_functor), step_handler(std::move(step_handler)) {
+        acceleration_functor(acceleration_functor), step_handler(step_handler) {
 
         static_assert(std::is_same<decltype(*x_begin), field_value_t &>::value,
                 "field_container_t must be a container of values of type field_value_t");
@@ -50,7 +50,7 @@ protected:
     real_t t;
     typename field_container_t::iterator x_begin_itr, x_end_itr, v_begin_itr, a_begin_itr;
     functor_t & acceleration_functor;
-    step_handler_t<field_container_t, field_value_t> step_handler;
+    step_handler_t<field_container_t, field_value_t> & step_handler;
 };
 
 #include "forward_euler.h"
