@@ -43,8 +43,6 @@ protected:
         typename field_container_t::const_iterator x_end_const_itr = this->x_end_itr;
         typename field_container_t::const_iterator v_begin_const_itr = this->v_begin_itr;
 
-        step_handler_t<field_container_t, field_value_t> step_handler;
-
         // Initialize the accelerations from the initial condition
         this->acceleration_functor(x_begin_const_itr, x_end_const_itr, v_begin_const_itr, this->a_begin_itr, this->t);
     }
@@ -52,6 +50,7 @@ protected:
     real_t t;
     typename field_container_t::iterator x_begin_itr, x_end_itr, v_begin_itr, a_begin_itr;
     functor_t & acceleration_functor;
+    step_handler_t<field_container_t, field_value_t> step_handler;
 };
 
 #include "forward_euler.h"
