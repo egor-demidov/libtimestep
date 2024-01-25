@@ -15,6 +15,6 @@ jobs:
         with:
           submodules: recursive
       - run: sudo apt install libtbb2-dev
-      - run: /usr/lib/x86_64-linux-gnu/cmake/TBB
+      - run: ls /usr/lib/x86_64-linux-gnu/cmake/TBB
       - name: Run unit tests
         uses: HorstBaerbel/action-ctest@1.1
