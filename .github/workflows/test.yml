@@ -29,4 +29,4 @@ jobs:
           submodules: recursive
       - run: cmake .
       - run: cmake --build .
-      - run: ctest
+      - run: ctest -C Debug
