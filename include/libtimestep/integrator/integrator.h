@@ -36,14 +36,14 @@ public:
 
     virtual void do_step(real_t dt) = 0;
 
-    step_handler_t<field_container_t, field_value_t> step_handler;
-
 protected:
     void update_acceleration() const {
         // Create const iterators for field arrays that are not supposed to be modified by the acceleration functor
         typename field_container_t::const_iterator x_begin_const_itr = this->x_begin_itr;
         typename field_container_t::const_iterator x_end_const_itr = this->x_end_itr;
         typename field_container_t::const_iterator v_begin_const_itr = this->v_begin_itr;
+
+        step_handler_t<field_container_t, field_value_t> step_handler;
 
         // Initialize the accelerations from the initial condition
         this->acceleration_functor(x_begin_const_itr, x_end_const_itr, v_begin_const_itr, this->a_begin_itr, this->t);
