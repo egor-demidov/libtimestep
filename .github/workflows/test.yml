@@ -19,3 +19,14 @@ jobs:
       - run: cmake -DTBB_DIR=/usr/lib/x86_64-linux-gnu/cmake/TBB .
       - run: cmake --build .
       - run: ctest
+
+  checkout-and-ctest-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - run: cmake .
+      - run: cmake --build .
+      - run: ctest
