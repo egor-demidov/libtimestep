@@ -21,22 +21,32 @@ template <
     typename step_handler_t>
 class integrator {
 public:
-    integrator(functor_t & acceleration_functor, real_t t0,
-               typename field_container_t::iterator x_begin,
-               typename field_container_t::iterator x_end,
-               typename field_container_t::iterator v_begin,
-               typename field_container_t::iterator a_begin,
-               step_handler_t<field_container_t, field_value_t> & step_handler) :
+
+    // Class constructor
+    //
+    // Notes:
+    // Iterators passed to this constructor must remain valid for the duration of use of this integrator
+    // x, v, and a buffers must be of the same size
+    // The acceleration functor and the step handler must exist for the duration of use of this integrator
+    integrator(functor_t & acceleration_functor,                                    // reference to a functor that computes acceleration
+               real_t t0,                                                           // reference to a functor that computes acceleration
+               typename field_container_t::iterator x_begin,                        // iterator pointing to the start of the x buffer
+               typename field_container_t::iterator x_end,                          // iterator pointing to the end of the x buffer
+               typename field_container_t::iterator v_begin,                        // iterator pointing to the start of the v buffer
+               typename field_container_t::iterator a_begin,                        // iterator pointing to the start of the a buffer
+               step_handler_t<field_container_t, field_value_t> & step_handler) :   // reference to an object that handles incrementing positions and velocities
+
+        // Initialize all the member variables
         t(t0), x_begin_itr(x_begin), x_end_itr(x_end), v_begin_itr(v_begin), a_begin_itr(a_begin),
         acceleration_functor(acceleration_functor), step_handler(step_handler) {
 
+        // Check the container type
         static_assert(std::is_same<decltype(*x_begin), field_value_t &>::value,
                 "field_container_t must be a container of values of type field_value_t");
     }
 
-    virtual void do_step(real_t dt) = 0;
-
 protected:
+    // This method should be called by any derived class when accelerations need to be recalculated
     void update_acceleration() const {
         // Create const iterators for field arrays that are not supposed to be modified by the acceleration functor
         typename field_container_t::const_iterator x_begin_const_itr = this->x_begin_itr;
@@ -54,7 +64,6 @@ protected:
 };
 
 #include "forward_euler.h"
-//#include "velocity_verlet.h"
 #include "velocity_verlet_half.h"
 
 #endif //INTEGRATORS_INTEGRATOR_H

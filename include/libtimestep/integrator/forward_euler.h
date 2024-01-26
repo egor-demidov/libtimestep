@@ -6,6 +6,7 @@
 #define INTEGRATORS_FORWARD_EULER_H
 
 // Integrator template that implements the Forward Euler integration scheme
+// For position, uses a two-term Taylor expansion to reduce truncation error
 template <
     typename field_container_t,
     typename field_value_t,
@@ -17,15 +18,27 @@ template <
     typename step_handler_t>
 class forward_euler : public integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t> {
 public:
-    forward_euler(functor_t & acceleration_functor, real_t t0,
-                  typename field_container_t::iterator x_begin,
-                  typename field_container_t::iterator x_end,
-                  typename field_container_t::iterator v_begin,
-                  typename field_container_t::iterator a_begin,
-                  step_handler_t<field_container_t, field_value_t> & step_handler) :
-            integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0, x_begin, x_end, v_begin, a_begin, step_handler) {}
 
-    void do_step(real_t dt) override {
+    // Class constructor
+    //
+    // Notes:
+    // Iterators passed to this constructor must remain valid for the duration of use of this integrator
+    // x, v, and a buffers must be of the same size
+    // The acceleration functor and the step handler must exist for the duration of use of this integrator
+    forward_euler(functor_t & acceleration_functor,                                     // reference to a functor that computes acceleration
+                  real_t t0,                                                            // time at which integration starts
+                  typename field_container_t::iterator x_begin,                         // iterator pointing to the start of the x buffer
+                  typename field_container_t::iterator x_end,                           // iterator pointing to the end of the x buffer
+                  typename field_container_t::iterator v_begin,                         // iterator pointing to the start of the v buffer
+                  typename field_container_t::iterator a_begin,                         // iterator pointing to the start of the a buffer
+                  step_handler_t<field_container_t, field_value_t> & step_handler) :    // reference to an object that handles incrementing positions and velocities
+
+          // Call the superclass constructor
+          integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(
+            acceleration_functor, t0, x_begin, x_end, v_begin, a_begin, step_handler) {}
+
+    // Perform one time step
+    void do_step(real_t dt /*time step*/) {
         // Re-compute the acceleration
         this->update_acceleration();
 
