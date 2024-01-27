@@ -10,6 +10,15 @@
 
 #include "../exception/exception.h"
 
+// This is a base class for a second order rotational system
+//
+// Template parameters:
+// primary field type
+// real numer type
+// integrator type
+// step handler type
+// step handler type
+// acceleration functor type
 template <
         typename field_value_t,
         typename real_t,
@@ -33,17 +42,27 @@ public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
 
-    // The containers cannot be resized after the integrator has been instantiated because that would
-    // invalidate the iterators
-    rotational_generic_system(field_container_t x0, field_container_t v0, field_container_t theta0, field_container_t omega0,
-                     real_t t0, field_value_t field_zero, real_t real_zero, functor_t & functor_ref,
-                     step_handler_t<field_container_t, field_value_t> & step_handler) :
-            field_zero(std::move(field_zero)), real_zero(real_zero), x(std::move(x0)), v(std::move(v0)), a(x.size()),
-            theta(std::move(theta0)), omega(std::move(omega0)), alpha(x.size()),
-            integrator(functor_ref, t0, std::begin(this->x), std::end(this->x),
-                       std::begin(this->v), std::begin(this->a),
-                       std::begin(this->theta), std::begin(this->omega), std::begin(this->alpha),
-                       step_handler) {
+    // Class constructor
+    //
+    // Notes:
+    // The acceleration functor and the step handler must exist for the duration of use of this second order system
+    rotational_generic_system(field_container_t x0,                                                 // container with initial positions
+                              field_container_t v0,                                                 // container with initial velocities
+                              field_container_t theta0,                                             // container with initial angles
+                              field_container_t omega0,                                             // container with initial angular velocities
+                              real_t t0,                                                            // integration start time
+                              field_value_t field_zero,                                             // zero value of the primary field type used
+                              real_t real_zero,                                                     // zero value of the real number type used
+                              functor_t & functor_ref,                                              // reference to the object that handles calculating accelerations
+                              step_handler_t<field_container_t, field_value_t> & step_handler) :    // reference to an object that handles incrementing positions and velocities
+
+        // Initialize the member variables
+        field_zero(std::move(field_zero)), real_zero(real_zero), x(std::move(x0)), v(std::move(v0)), a(x.size()),
+        theta(std::move(theta0)), omega(std::move(omega0)), alpha(x.size()),
+        integrator(functor_ref, t0, std::begin(this->x), std::end(this->x),
+                   std::begin(this->v), std::begin(this->a),
+                   std::begin(this->theta), std::begin(this->omega), std::begin(this->alpha),
+                   step_handler) {
 
         // Assert that x and v buffers are of the same size
         if (x.size() != v.size() || x.size() != theta.size() || x.size() != omega.size())
