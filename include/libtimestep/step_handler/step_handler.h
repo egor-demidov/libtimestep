@@ -19,16 +19,18 @@ struct step_handler {
     void increment_x(size_t n,                                                                          // index of the value to increment
                     field_value_t const & dx,                                                           // value of the position increment
                     typename field_container_t::iterator x_begin_itr,                                   // iterator pointing to the start of the x buffer
-                    typename field_container_t::const_iterator v_begin_itr [[maybe_unused]]) const {    // iterator pointing to the start of the v buffer
+                    typename field_container_t::const_iterator v_begin_itr [[maybe_unused]],            // iterator pointing to the start of the v buffer
+                    typename field_container_t::const_iterator a_begin_itr [[maybe_unused]]) const {    // iterator pointing to the start of the a buffer
 
         *(x_begin_itr + n) += dx;
     }
 
     // This method increments the specified value in the v buffer
-    void increment_v(size_t n,                                                                      // index of the value to increment
-                     field_value_t const & dv,                                                      // value of the velocity increment
-                     typename field_container_t::const_iterator x_begin_itr [[maybe_unused]],       // iterator pointing to the start of the x buffer
-                     typename field_container_t::iterator v_begin_itr) const {                      // iterator pointing to the start of the v buffer
+    void increment_v(size_t n,                                                                          // index of the value to increment
+                     field_value_t const & dv,                                                          // value of the velocity increment
+                     typename field_container_t::const_iterator x_begin_itr [[maybe_unused]],           // iterator pointing to the start of the x buffer
+                     typename field_container_t::iterator v_begin_itr,                                  // iterator pointing to the start of the v buffer
+                     typename field_container_t::const_iterator a_begin_itr [[maybe_unused]]) const {   // iterator pointing to the start of the a buffer
 
         *(v_begin_itr + n) += dv;
     }
