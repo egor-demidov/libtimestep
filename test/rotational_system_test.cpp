@@ -13,7 +13,7 @@
 #include <libtimestep/rotational_system/rotational_system.h>
 #include <libtimestep/rotational_step_handler/rotational_step_handler.h>
 
-#include "compute_energy.h"
+#include "../../soot-indentation/energy/compute_energy.h"
 #include "write_vtk.h"
 
 class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem> {
@@ -41,6 +41,16 @@ public:
         auto [ai2, alphai2] = compute_attraction(xi, xj);
 
         return std::make_pair(ai1+ai2, alphai1+alphai2);
+    }
+
+    std::pair<Eigen::Vector3d, Eigen::Vector3d> compute_accelerations(size_t i [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & x [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & v [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & theta [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & omega [[maybe_unused]],
+                                         double t [[maybe_unused]]) {
+
+        return std::make_pair(Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero());
     }
 
 private:

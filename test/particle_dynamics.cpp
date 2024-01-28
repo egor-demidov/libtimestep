@@ -14,7 +14,7 @@
 #include <libtimestep/step_handler/step_handler.h>
 #include <libtimestep/system/system.h>
 
-#include "compute_energy.h"
+#include "../../soot-indentation/energy/compute_energy.h"
 
 // Implement a binary second-order granular system
 // NOTE: this could have also been implemented in a unary system, but the binary system interface uses
@@ -39,6 +39,14 @@ public:
         auto const & v_j = this->v[j];
 
         return (compute_elasticity(x_i, x_j, v_i, v_j) + compute_attraction(x_i, x_j)) / m;
+    }
+
+    Eigen::Vector3d compute_acceleration(size_t i [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & x [[maybe_unused]],
+                                         std::vector<Eigen::Vector3d> const & v [[maybe_unused]],
+                                         double t [[maybe_unused]]) {
+
+        return Eigen::Vector3d::Zero();
     }
 
 private:

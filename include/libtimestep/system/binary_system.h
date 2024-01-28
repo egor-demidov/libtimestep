@@ -64,6 +64,7 @@ public:
 
                 this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);
             });
+            this->a[i] += acceleration_handler.compute_acceleration(i, this->get_x(), this->get_v(), t);
         });
     }
 
