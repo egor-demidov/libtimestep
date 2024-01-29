@@ -13,7 +13,7 @@
 #include <libtimestep/system/system.h>
 #include <libtimestep/step_handler/step_handler.h>
 
-#include "../../soot-indentation/energy/compute_energy.h"
+#include "compute_energy.h"
 #include "write_vtk.h"
 
 // WARNING: care must be taken when using state buffers in your implementation of binary_system

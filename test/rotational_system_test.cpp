@@ -13,7 +13,7 @@
 #include <libtimestep/rotational_system/rotational_system.h>
 #include <libtimestep/rotational_step_handler/rotational_step_handler.h>
 
-#include "../../soot-indentation/energy/compute_energy.h"
+#include "compute_energy.h"
 #include "write_vtk.h"
 
 class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem> {
