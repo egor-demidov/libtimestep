@@ -24,9 +24,10 @@ template <
         typename _field_container_t,
         typename _field_value_t>
     typename step_handler_t,
-    typename acceleration_handler_t>
+    typename acceleration_handler_t,
+    bool have_unary_force>
 class binary_system : public generic_system<field_value_t, real_t, integrator_t, step_handler_t,
-        binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
+        binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
@@ -64,7 +65,9 @@ public:
 
                 this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);
             });
-            this->a[i] += acceleration_handler.compute_acceleration(i, this->get_x(), this->get_v(), t);
+            if constexpr (have_unary_force) {
+                this->a[i] += acceleration_handler.compute_acceleration(i, this->get_x(), this->get_v(), t);
+            }
         });
     }
 

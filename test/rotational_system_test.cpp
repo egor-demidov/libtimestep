@@ -16,12 +16,12 @@
 #include "compute_energy.h"
 #include "write_vtk.h"
 
-class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem> {
+class RotationalGranularSystem : public rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem, false> {
 public:
     RotationalGranularSystem(double k, double g, double r, double m, double gamma_c,
                              std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0,
                              std::vector<Eigen::Vector3d> theta0, std::vector<Eigen::Vector3d> omega0, double t0) :
-            rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem>(std::move(x0), std::move(v0),
+            rotational_binary_system<Eigen::Vector3d, double, rotational_velocity_verlet_half, rotational_step_handler, RotationalGranularSystem, false>(std::move(x0), std::move(v0),
                                                                             std::move(theta0), std::move(omega0),
                                                                             t0, Eigen::Vector3d::Zero(), 0.0, *this, step_handler_instance),
                                                                             k(k), g(g), r(r), m(m), gamma_c(gamma_c) {}

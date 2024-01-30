@@ -20,11 +20,11 @@
 // NOTE: this could have also been implemented in a unary system, but the binary system interface uses
 // multithreading and will be faster for larger systems
 // Here Velocity Verlet integration scheme because it leads to more stable particulate simulations
-class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem> {
+class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false> {
 public:
     GranularSystem(double k, double m, double g, double gamma_c, double r_part,
                    std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0) :
-            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem>(std::move(x0), std::move(v0),
+            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false>(std::move(x0), std::move(v0),
                                                                                        t0, Eigen::Vector3d::Zero(), 0.0, *this, step_handler_instance),
                     k(k), m(m), g(g), gamma_c(gamma_c), r_part(r_part) {}
 

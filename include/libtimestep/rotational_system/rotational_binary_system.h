@@ -24,9 +24,10 @@ template <
         typename _field_container_t,
         typename _field_value_t>
     typename step_handler_t,
-    typename acceleration_handler_t>
+    typename acceleration_handler_t,
+    bool have_unary_force>
 class rotational_binary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t,
-        rotational_binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t>> {
+        rotational_binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
@@ -73,10 +74,13 @@ public:
                 this->a[i] += a_i_new;
                 this->alpha[i] += alpha_i_new;
             });
-            auto [a_i_new, alpha_i_new] = acceleration_handler.compute_accelerations(i, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);
+            // This is a compile-time conditional
+            if constexpr (have_unary_force) {
+                auto [a_i_new, alpha_i_new] = acceleration_handler.compute_accelerations(i, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);
 
-            this->a[i] += a_i_new;
-            this->alpha[i] += alpha_i_new;
+                this->a[i] += a_i_new;
+                this->alpha[i] += alpha_i_new;
+            }
         });
     }
 
