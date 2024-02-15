@@ -5,6 +5,8 @@
 #ifndef INTEGRATORS_UNARY_SYSTEM_H
 #define INTEGRATORS_UNARY_SYSTEM_H
 
+#include "system.h"
+
 // This is a base class for a simple second order system
 template <
     typename field_value_t,

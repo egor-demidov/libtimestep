@@ -5,6 +5,8 @@
 #ifndef INTEGRATORS_ROTATIONAL_UNARY_SYSTEM_H
 #define INTEGRATORS_ROTATIONAL_UNARY_SYSTEM_H
 
+#include "rotational_system.h"
+
 // This is a base class for a simple rotational second order system
 template <
     typename field_value_t,

@@ -10,7 +10,7 @@
 #include <Eigen/Eigen>
 
 #include <libtimestep/rotational_integrator/rotational_integrator.h>
-#include <libtimestep/rotational_system/rotational_system.h>
+#include <libtimestep/rotational_system/rotational_binary_system.h>
 #include <libtimestep/rotational_step_handler/rotational_step_handler.h>
 
 #include "compute_energy.h"

@@ -116,8 +116,4 @@ protected:
     integrator_t<field_container_t, field_value_t, real_t, functor_t, step_handler_t> integrator;
 };
 
-#include "rotational_binary_system.h"
-#include "rotational_binary_system_omp.h"
-#include "rotational_unary_system.h"
-
 #endif //INTEGRATORS_ROTATIONAL_SYSTEM_H

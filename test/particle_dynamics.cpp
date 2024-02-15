@@ -12,7 +12,7 @@
 
 #include <libtimestep/integrator/integrator.h>
 #include <libtimestep/step_handler/step_handler.h>
-#include <libtimestep/system/system.h>
+#include <libtimestep/system/binary_system.h>
 
 #include "compute_energy.h"
 

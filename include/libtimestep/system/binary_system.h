@@ -5,6 +5,8 @@
 #ifndef INTEGRATORS_BINARY_SYSTEM_H
 #define INTEGRATORS_BINARY_SYSTEM_H
 
+#include "system.h"
+
 #include <execution>
 
 // This is a base class for a second order system where accelerations depend on binary

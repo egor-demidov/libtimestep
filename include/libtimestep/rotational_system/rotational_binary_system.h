@@ -5,6 +5,8 @@
 #ifndef INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_H
 #define INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_H
 
+#include "rotational_system.h"
+
 #include <execution>
 
 // This is a base class for a second order rotational system where accelerations depend on binary

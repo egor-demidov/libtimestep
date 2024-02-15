@@ -5,6 +5,8 @@
 #ifndef INTEGRATORS_BINARY_SYSTEM_OMP_H
 #define INTEGRATORS_BINARY_SYSTEM_OMP_H
 
+#include "system.h"
+
 #include <omp.h>
 
 // This is a base class for a second order system where accelerations depend on binary

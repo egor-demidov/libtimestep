@@ -9,7 +9,7 @@
 
 #include <libtimestep/integrator/integrator.h>
 #include <libtimestep/step_handler/step_handler.h>
-#include <libtimestep/system/system.h>
+#include <libtimestep/system/unary_system.h>
 
 // Implement a unary second-order system
 class OscillatorSystem : public unary_system<double, double, forward_euler, step_handler, OscillatorSystem> {

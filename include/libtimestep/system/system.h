@@ -100,8 +100,4 @@ protected:
     integrator_t<field_container_t, field_value_t, real_t, functor_t, step_handler_t> integrator;
 };
 
-#include "binary_system.h"
-#include "binary_system_omp.h"
-#include "unary_system.h"
-
 #endif //INTEGRATORS_SYSTEM_H
