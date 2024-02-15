@@ -6,7 +6,8 @@
 #define INTEGRATORS_SYSTEM_H
 
 #include <vector>
-#include <execution>
+#include <algorithm>
+#include <numeric>
 
 #include "../exception/exception.h"
 
@@ -100,6 +101,7 @@ protected:
 };
 
 #include "binary_system.h"
+#include "binary_system_omp.h"
 #include "unary_system.h"
 
 #endif //INTEGRATORS_SYSTEM_H

@@ -6,7 +6,8 @@
 #define INTEGRATORS_ROTATIONAL_SYSTEM_H
 
 #include <vector>
-#include <execution>
+#include <algorithm>
+#include <numeric>
 
 #include "../exception/exception.h"
 
@@ -116,6 +117,7 @@ protected:
 };
 
 #include "rotational_binary_system.h"
+#include "rotational_binary_system_omp.h"
 #include "rotational_unary_system.h"
 
 #endif //INTEGRATORS_ROTATIONAL_SYSTEM_H

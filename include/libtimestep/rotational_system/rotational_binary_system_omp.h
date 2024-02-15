@@ -1,11 +1,11 @@
 //
-// Created by egor on 1/21/24.
+// Created by egor on 2/14/24.
 //
 
-#ifndef INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_H
-#define INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_H
+#ifndef INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_OMP_H
+#define INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_OMP_H
 
-#include <execution>
+#include <omp.h>
 
 // This is a base class for a second order rotational system where accelerations depend on binary
 // interactions between fields
@@ -28,8 +28,8 @@ template <
     typename step_handler_t,
     typename acceleration_handler_t,
     bool have_unary_force>
-class rotational_binary_system : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t,
-        rotational_binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
+class rotational_binary_system_omp : public rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t,
+        rotational_binary_system_omp<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
     typedef std::vector<size_t> index_container_t;
@@ -39,7 +39,7 @@ public:
     // Notes:
     // The acceleration handler and the step handler must exist for the duration of use of this second order system
     // This class itself acts as the acceleration functor for the integrator
-    rotational_binary_system(field_container_t x0,                                              // container with initial positions
+    rotational_binary_system_omp(field_container_t x0,                                              // container with initial positions
                              field_container_t v0,                                              // container with initial velocities
                              field_container_t theta0,                                          // container with initial angles
                              field_container_t omega0,                                          // container with initial angular velocities
@@ -50,7 +50,7 @@ public:
                              step_handler_t<field_container_t, field_value_t> & step_handler) : // reference to an object that handles incrementing positions and velocities
 
          // Call the superclass constructor
-         rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_binary_system>(
+         rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_binary_system_omp>(
             std::move(x0), std::move(v0), std::move(theta0), std::move(omega0), t0, field_zero, real_zero, *this, step_handler),
             acceleration_handler(acceleration_handler) {}
 
@@ -66,16 +66,18 @@ public:
 
         this->reset_acceleration_buffers();
 
-        std::for_each(std::execution::par_unseq, this->indices.begin(), this->indices.end(), [t, this] (size_t i) {
-            std::for_each(this->indices.begin(), this->indices.end(), [t, i, this] (size_t j) {
+        #pragma omp parallel for default(none) shared(t)
+        for (size_t i = 0; i < this->indices.size(); i ++) {
+            for (size_t j = 0; j < this->indices.size(); j ++) {
                 if (i == j)
-                    return;
+                    continue;
 
                 auto [a_i_new, alpha_i_new] = acceleration_handler.compute_accelerations(i, j, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);
 
                 this->a[i] += a_i_new;
                 this->alpha[i] += alpha_i_new;
-            });
+            }
+
             // This is a compile-time conditional
             if constexpr (have_unary_force) {
                 auto [a_i_new, alpha_i_new] = acceleration_handler.compute_accelerations(i, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);
@@ -83,11 +85,12 @@ public:
                 this->a[i] += a_i_new;
                 this->alpha[i] += alpha_i_new;
             }
-        });
+        }
     }
 
 private:
     acceleration_handler_t & acceleration_handler;
 };
 
-#endif //INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_H
+
+#endif //INTEGRATORS_ROTATIONAL_BINARY_SYSTEM_OMP_H
