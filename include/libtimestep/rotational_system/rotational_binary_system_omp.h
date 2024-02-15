@@ -67,8 +67,8 @@ public:
         this->reset_acceleration_buffers();
 
         #pragma omp parallel for default(none) shared(t)
-        for (size_t i = 0; i < this->indices.size(); i ++) {
-            for (size_t j = 0; j < this->indices.size(); j ++) {
+        for (long i = 0; i < this->indices.size(); i ++) {
+            for (long j = 0; j < this->indices.size(); j ++) {
                 if (i == j)
                     continue;
 
