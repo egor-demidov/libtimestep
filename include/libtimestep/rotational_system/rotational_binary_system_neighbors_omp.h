@@ -59,7 +59,7 @@ public:
 
     // Call the superclass constructor
             rotational_generic_system<field_value_t, real_t, integrator_t, step_handler_t, rotational_binary_system_neighbors_omp>(std::move(x0),
-                                                                                                             std::move(v0), t0, field_zero, real_zero, *this, step_handler),
+                                                                                                             std::move(v0), std::move(theta0), std::move(omega0), t0, field_zero, real_zero, *this, step_handler),
             n_part(n_part),
             r_verlet(r_verlet),
             acceleration_handler(acceleration_handler),
