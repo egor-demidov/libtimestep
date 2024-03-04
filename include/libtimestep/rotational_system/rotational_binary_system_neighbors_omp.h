@@ -75,7 +75,7 @@ public:
                      typename field_container_t::iterator alpha_begin [[maybe_unused]],
                      real_t t) {
 
-        this->reset_acceleration_buffer();
+        this->reset_acceleration_buffers();
 
 #pragma omp parallel for default(none) shared(t)
         for (long i = 0; i < n_part; i ++) {
