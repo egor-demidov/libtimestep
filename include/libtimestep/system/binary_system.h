@@ -34,7 +34,7 @@ class binary_system : public generic_system<field_value_t, real_t, integrator_t,
         binary_system<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
-    typedef std::vector<size_t> index_container_t;
+    typedef std::vector<long> index_container_t;
 
     // Class constructor
     //
@@ -62,8 +62,8 @@ public:
 
         this->reset_acceleration_buffer();
 
-        std::for_each(std::execution::par_unseq, this->indices.begin(), this->indices.end(), [t, this] (size_t i) {
-            std::for_each(this->indices.begin(), this->indices.end(), [t, i, this] (size_t j) {
+        std::for_each(std::execution::par_unseq, this->indices.begin(), this->indices.end(), [t, this] (long i) {
+            std::for_each(this->indices.begin(), this->indices.end(), [t, i, this] (long j) {
                 if (i == j)
                     return;
 

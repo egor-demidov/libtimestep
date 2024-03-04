@@ -46,7 +46,7 @@ public:
         this->t += dt;
 
         // Integrate position and velocity
-        for (size_t n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
+        for (long n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
             field_value_t const & v = *(this->v_begin_itr + n);
             field_value_t const & a = *(this->a_begin_itr + n);
 

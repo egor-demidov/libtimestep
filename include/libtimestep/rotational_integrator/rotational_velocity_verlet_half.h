@@ -49,7 +49,7 @@ public:
         if (!velocities_initialized){
             velocities_initialized = true;
 
-            for (size_t n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
+            for (long n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
                 field_value_t const & a = *(this->a_begin_itr + n);
                 field_value_t const & alpha = *(this->alpha_begin_itr + n);
 
@@ -61,7 +61,7 @@ public:
         }
 
         // Integrate velocity and position
-        for (size_t n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
+        for (long n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
             field_value_t & v = *(this->v_begin_itr + n);
             field_value_t const & a = *(this->a_begin_itr + n);
             field_value_t & omega = *(this->omega_begin_itr + n);

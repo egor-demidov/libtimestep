@@ -41,7 +41,7 @@ template <
 class generic_system {
 public:
     typedef std::vector<field_value_t> field_container_t;
-    typedef std::vector<size_t> index_container_t;
+    typedef std::vector<long> index_container_t;
 
     // Class constructor
     //

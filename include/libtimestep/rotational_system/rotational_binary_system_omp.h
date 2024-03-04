@@ -34,7 +34,7 @@ class rotational_binary_system_omp : public rotational_generic_system<field_valu
         rotational_binary_system_omp<field_value_t, real_t, integrator_t, step_handler_t, acceleration_handler_t, have_unary_force>> {
 public:
     typedef std::vector<field_value_t> field_container_t;
-    typedef std::vector<size_t> index_container_t;
+    typedef std::vector<long> index_container_t;
 
     // Class constructor
     //
@@ -69,8 +69,8 @@ public:
         this->reset_acceleration_buffers();
 
         #pragma omp parallel for default(none) shared(t)
-        for (long i = 0; i < this->indices.size(); i ++) {
-            for (long j = 0; j < this->indices.size(); j ++) {
+        for (long i = 0; i < (long) this->indices.size(); i ++) {
+            for (long j = 0; j < (long) this->indices.size(); j ++) {
                 if (i == j)
                     continue;
 

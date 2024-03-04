@@ -12,7 +12,7 @@
 
 #include <libtimestep/integrator/integrator.h>
 #include <libtimestep/step_handler/step_handler.h>
-#include <libtimestep/system/binary_system.h>
+#include <libtimestep/system/binary_system_neighbors_omp.h>
 
 #include "compute_energy.h"
 
@@ -20,16 +20,16 @@
 // NOTE: this could have also been implemented in a unary system, but the binary system interface uses
 // multithreading and will be faster for larger systems
 // Here Velocity Verlet integration scheme because it leads to more stable particulate simulations
-class GranularSystem : public binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false> {
+class GranularSystem : public binary_system_neighbors_omp<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false> {
 public:
     GranularSystem(double k, double m, double g, double gamma_c, double r_part,
-                   std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0) :
-            binary_system<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false>(std::move(x0), std::move(v0),
+                   std::vector<Eigen::Vector3d> x0, std::vector<Eigen::Vector3d> v0, double t0, size_t n_part) :
+            binary_system_neighbors_omp<Eigen::Vector3d, double, velocity_verlet_half, step_handler, GranularSystem, false>(n_part, 5.0 * r_part, std::move(x0), std::move(v0),
                                                                                        t0, Eigen::Vector3d::Zero(), 0.0, *this, step_handler_instance),
                     k(k), m(m), g(g), gamma_c(gamma_c), r_part(r_part) {}
 
     // Compute the acceleration of particle i due to its interaction with particle j
-    Eigen::Vector3d compute_acceleration(size_t i, size_t j,
+    Eigen::Vector3d compute_acceleration(long i, long j,
                                          std::vector<Eigen::Vector3d> const & x [[maybe_unused]],
                                          std::vector<Eigen::Vector3d> const & v [[maybe_unused]],
                                          double t [[maybe_unused]]) {
@@ -41,7 +41,7 @@ public:
         return (compute_elasticity(x_i, x_j, v_i, v_j) + compute_attraction(x_i, x_j)) / m;
     }
 
-    Eigen::Vector3d compute_acceleration(size_t i [[maybe_unused]],
+    Eigen::Vector3d compute_acceleration(long i [[maybe_unused]],
                                          std::vector<Eigen::Vector3d> const & x [[maybe_unused]],
                                          std::vector<Eigen::Vector3d> const & v [[maybe_unused]],
                                          double t [[maybe_unused]]) {
@@ -85,14 +85,14 @@ bool do_overlap(std::vector<Eigen::Vector3d> const & particles, Eigen::Vector3d 
 int main() {
     const double dt = 0.001;                        // Integration time step
     const double t_tot = 50.0;                      // Duration of the simulation
-    const auto n_steps = size_t(t_tot / dt);        // Number of time steps
+    const auto n_steps = long(t_tot / dt);        // Number of time steps
     const double r_part = 0.1;                      // Radius of a particle
     const double k = 1000.0;                        // Elastic stiffness of aa particle
     const double m = 1.0;                           // Mass of a particle
     const double g = 0.2;                           // Attraction acceleration between particles
     const double gamma_c = 0.2;                    // Elastic (collision) damping coefficient
 
-    const size_t seed = 0;                          // Deterministic seed for pRNG for reproducibility
+    const long seed = 0;                          // Deterministic seed for pRNG for reproducibility
 
     std::vector<Eigen::Vector3d> x0, v0;
 
@@ -100,7 +100,7 @@ int main() {
     // Random particles will be generated in a box of size 1 around the origin
     std::mt19937_64 mt(seed);
     std::uniform_real_distribution<double> dist(-1.0, 1.0);
-    for (size_t i = 0; i < 100; i ++) {
+    for (long i = 0; i < 100; i ++) {
         Eigen::Vector3d x_part;
         do {
             x_part = {dist(mt), dist(mt), dist(mt)};
@@ -110,14 +110,17 @@ int main() {
 
     v0.resize(x0.size(), Eigen::Vector3d::Zero());
 
-    GranularSystem system(k, m, g, gamma_c, r_part, x0, v0, 0.0);
+    GranularSystem system(k, m, g, gamma_c, r_part, x0, v0, 0.0, x0.size());
 
-    for (size_t n = 0; n < n_steps; n ++) {
+    for (long n = 0; n < n_steps; n ++) {
+        if (n % 20 == 0)
+            system.update_neighbor_list();
         system.do_step(dt);
     }
 
     const double target_linear_momentum = 1.39595e-13;
     const double tolerance = 5.0; // Percent
+    std::cout << "Actual linear momentum: " << compute_linear_momentum(system.get_v(), m) << std::endl;
 
     if (compute_linear_momentum(system.get_v(), m) > target_linear_momentum * (1.0 + tolerance / 100.0))
         return EXIT_FAILURE;

@@ -20,8 +20,8 @@ public:
             k(k), m(m), gamma_d(gamma_d) {}
 
     double compute_acceleration(size_t i,
-                                std::vector<double> const & x,
-                                std::vector<double> const & v,
+                                std::vector<double> const & x [[maybe_unused]],
+                                std::vector<double> const & v [[maybe_unused]],
                                 double t [[maybe_unused]]) {
         auto const & x_i = this->get_x()[i];
         auto const & v_i = this->get_v()[i];

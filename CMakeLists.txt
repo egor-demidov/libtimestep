@@ -9,10 +9,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (${CMAKE_COMPILER_IS_GNUCXX})
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -O3 -flto=auto -fopenmp ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -O3 -flto=auto -fopenmp ${CMAKE_CXX_FLAGS}")
 endif ()
 
-include_directories(test/deps/eigen)
+include_directories(SYSTEM test/deps/eigen)
 
 #add_subdirectory(test/deps/matplotplusplus)
 set(CMAKE_FIND_DEBUG_MODE ON)
@@ -32,6 +32,7 @@ add_executable(rotational_system_test_omp test/rotational_system_test_omp.cpp te
 add_executable(oscillator_test test/oscillator.cpp)
 add_executable(particle_dynamics_test test/particle_dynamics.cpp test/write_vtk.cpp test/compute_energy.cpp)
 add_executable(particle_dynamics_omp_test test/particle_dynamics_omp.cpp test/write_vtk.cpp test/compute_energy.cpp)
+add_executable(particle_dynamics_neighbors_omp_test test/particle_dynamics_neighbors_omp.cpp test/write_vtk.cpp test/compute_energy.cpp)
 
 if (${CMAKE_COMPILER_IS_GNUCXX})
     #target_link_libraries(particle_dynamics PRIVATE TBB::tbb)
@@ -45,3 +46,4 @@ endif ()
 add_test(NAME oscillator_test COMMAND ${CMAKE_BINARY_DIR}/oscillator_test)
 add_test(NAME particle_dynamics_test COMMAND ${CMAKE_BINARY_DIR}/particle_dynamics_test)
 add_test(NAME particle_dynamics_omp_test COMMAND ${CMAKE_BINARY_DIR}/particle_dynamics_omp_test)
+add_test(NAME particle_dynamics_heighbors_omp_test COMMAND ${CMAKE_BINARY_DIR}/particle_dynamics_neighbors_omp_test)
