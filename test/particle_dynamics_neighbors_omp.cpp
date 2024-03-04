@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <iostream>
 
 // Will be using Eigen for linear algebra
 // Any library that overloads arithmetic operators for vectors could work

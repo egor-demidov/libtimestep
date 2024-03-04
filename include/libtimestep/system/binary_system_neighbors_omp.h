@@ -5,9 +5,7 @@
 #ifndef INTEGRATORS_BINARY_SYSTEM_NEIGHBORS_OMP_H
 #define INTEGRATORS_BINARY_SYSTEM_NEIGHBORS_OMP_H
 
-#include <unordered_map>
 #include <vector>
-#include <iostream>
 
 #include "system.h"
 
