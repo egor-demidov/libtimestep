@@ -37,16 +37,15 @@ public:
 
         // Call the superclass constructor
         rotational_integrator<field_container_t, field_value_t, real_t, functor_t, step_handler_t>(acceleration_functor, t0,
-           x_begin, x_end, v_begin, a_begin, theta_begin, omega_begin, alpha_begin, step_handler) {
-
-        // Compute the accelerations
-        this->update_acceleration();
-    }
+           x_begin, x_end, v_begin, a_begin, theta_begin, omega_begin, alpha_begin, step_handler) {}
 
     // Perform one time step
     void do_step(real_t dt /*time step*/) {
         // If this is the first step, take half-a-timestep back in velocity
         if (!velocities_initialized){
+            // Compute the accelerations
+            this->update_acceleration();
+
             velocities_initialized = true;
 
             for (long n = 0; n < this->x_end_itr - this->x_begin_itr; n ++) {
