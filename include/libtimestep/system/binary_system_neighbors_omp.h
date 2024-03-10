@@ -75,7 +75,7 @@ public:
 #pragma omp parallel for default(none) shared(t)
         for (long i = 0; i < n_part; i ++) {
             for (long j : neighbor_list[i]) {
-                if (i == j)
+                if (i == j) [[unlikely]]
                     continue;
 
                 this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);

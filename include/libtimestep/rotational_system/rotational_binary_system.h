@@ -70,7 +70,7 @@ public:
 
         std::for_each(std::execution::par_unseq, this->indices.begin(), this->indices.end(), [t, this] (long i) {
             std::for_each(this->indices.begin(), this->indices.end(), [t, i, this] (long j) {
-                if (i == j)
+                if (i == j) [[unlikely]]
                     return;
 
                 auto [a_i_new, alpha_i_new] = acceleration_handler.compute_accelerations(i, j, this->get_x(), this->get_v(), this->get_theta(), this->get_omega(), t);

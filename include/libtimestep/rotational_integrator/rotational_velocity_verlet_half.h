@@ -42,7 +42,7 @@ public:
     // Perform one time step
     void do_step(real_t dt /*time step*/) {
         // If this is the first step, take half-a-timestep back in velocity
-        if (!velocities_initialized){
+        if (!velocities_initialized) [[unlikely]] {
             // Compute the accelerations
             this->update_acceleration();
 

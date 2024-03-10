@@ -64,7 +64,7 @@ public:
 
         std::for_each(std::execution::par_unseq, this->indices.begin(), this->indices.end(), [t, this] (long i) {
             std::for_each(this->indices.begin(), this->indices.end(), [t, i, this] (long j) {
-                if (i == j)
+                if (i == j) [[unlikely]]
                     return;
 
                 this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);

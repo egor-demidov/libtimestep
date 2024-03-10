@@ -40,7 +40,7 @@ public:
     void do_step(real_t dt /*time step*/) {
         // If this is the first step, take half-a-timestep back in velocity
         // Using Euler here
-        if (!velocities_initialized){
+        if (!velocities_initialized) [[unlikely]] {
             velocities_initialized = true;
 
             // Compute the accelerations

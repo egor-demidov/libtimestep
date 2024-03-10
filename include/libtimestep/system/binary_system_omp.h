@@ -65,7 +65,7 @@ public:
         #pragma omp parallel for default(none) shared(t)
         for (long i = 0; i < (long) this->indices.size(); i ++) {
             for (long j = 0; j < (long) this->indices.size(); j ++) {
-                if (i == j)
+                if (i == j) [[unlikely]]
                     continue;
 
                 this->a[i] += acceleration_handler.compute_acceleration(i, j, this->get_x(), this->get_v(), t);
