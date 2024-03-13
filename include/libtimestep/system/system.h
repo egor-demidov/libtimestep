@@ -91,6 +91,11 @@ public:
         return this->v;
     }
 
+    // Getter for a buffer
+    [[nodiscard]] field_container_t const & get_a() const {
+        return this->a;
+    }
+
 protected:
     const field_value_t field_zero;
     const real_t real_zero;

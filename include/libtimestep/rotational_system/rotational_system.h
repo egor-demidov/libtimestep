@@ -97,6 +97,11 @@ public:
         return this->v;
     }
 
+    // Getter for a buffer
+    [[nodiscard]] field_container_t const & get_a() const {
+        return this->a;
+    }
+
     // Getter for theta buffer
     [[nodiscard]] field_container_t const & get_theta() const {
         return this->theta;
@@ -105,6 +110,11 @@ public:
     // Getter for omega buffer
     [[nodiscard]] field_container_t const & get_omega() const {
         return this->omega;
+    }
+
+    // AGetter for alpha buffer
+    [[nodiscard]] field_container_t const & get_alpha() const {
+        return this->alpha;
     }
 
 protected:
