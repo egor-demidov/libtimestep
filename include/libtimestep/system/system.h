@@ -69,6 +69,9 @@ public:
 
         // Generate a vector with particle indices
         std::iota(indices.begin(), indices.end(), 0);
+
+        // Initialize the acceleration buffer to zero
+        reset_acceleration_buffer();
     }
 
     // This method should set all entries in the acceleration buffer to zero
