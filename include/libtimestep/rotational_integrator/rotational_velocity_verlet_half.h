@@ -73,6 +73,9 @@ public:
         }
 
         this->update_acceleration();
+
+        // Increment time
+        this->t += dt;
     }
 
 private:
