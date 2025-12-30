@@ -17,10 +17,10 @@ template <typename field_container_t, typename field_value_t>
 struct rotational_step_handler_pbc {
     using real_t = double;
 
-    std::vector<real_t> box_center;
-    std::vector<real_t> box_dimensions;
+    std::array<real_t, 3> &box_center;
+    std::array<real_t, 3> &box_dimensions;
 
-    rotational_step_handler_pbc(std::vector<real_t>& box_center, std::vector<real_t>& box_dims)
+    rotational_step_handler_pbc(std::array<real_t, 3>& box_center, std::array<real_t, 3>& box_dims)
         : box_center(box_center), box_dimensions(box_dims) {}
 
     // This method increments the specified value in the x buffer
@@ -35,15 +35,6 @@ struct rotational_step_handler_pbc {
 
         auto& pos = *(x_begin_itr + n);
         pos += dx;
-
-        for (int i = 0; i < 3; ++i) {
-            real_t half = box_dimensions[i] * real_t(0.5);
-
-            if (pos[i] < box_center[i] - half)
-                pos[i] += box_dimensions[i];
-            else if (pos[i] >= box_center[i] + half)
-                pos[i] -= box_dimensions[i];
-        }
     }
 
     // This method increments the specified value in the v buffer
