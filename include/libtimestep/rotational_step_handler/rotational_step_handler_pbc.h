@@ -17,12 +17,6 @@ template <typename field_container_t, typename field_value_t>
 struct rotational_step_handler_pbc {
     using real_t = double;
 
-    std::array<real_t, 3> &box_center;
-    std::array<real_t, 3> &box_dimensions;
-
-    rotational_step_handler_pbc(std::array<real_t, 3>& box_center, std::array<real_t, 3>& box_dims)
-        : box_center(box_center), box_dimensions(box_dims) {}
-
     // This method increments the specified value in the x buffer
     void increment_x(long n,                                                                              // index of the value to increment
                      field_value_t const & dx,                                                              // value of the position increment

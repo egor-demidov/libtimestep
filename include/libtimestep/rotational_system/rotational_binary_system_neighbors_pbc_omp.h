@@ -100,25 +100,28 @@ public:
     }
 
     // This method is called by the driver periodically to update the neighbor lists
-    void update_neighbor_list(std::vector<real_t> & r, std::array<real_t, 3> & box_dimensions) {
-#pragma omp parallel for default(none) shared(box_dimensions, r)
-        for (long i = 0; i < n_part; i ++) {
+    template<typename BoxType>
+    void update_neighbor_list(std::vector<real_t>& r,
+                              const BoxType& box)
+    {
+    #pragma omp parallel for default(none) shared(r, box)
+        for (long i = 0; i < n_part; i++)
+        {
             neighbor_list[i].clear();
 
-            for (long j = 0; j < n_part; j ++) {
+            for (long j = 0; j < n_part; j++)
+            {
                 if (i == j)
                     continue;
 
-                // Box image convention
+                // raw displacement
                 field_value_t d = this->get_x()[i] - this->get_x()[j];
 
-                for(int k = 0; k < 3; ++k) {
-                    d[k] -= box_dimensions[k] * round(d[k]/box_dimensions[k]);
-                    if (d[k] >  0.5 * box_dimensions[k]) d[k] -= box_dimensions[k];
-                    if (d[k] < -0.5 * box_dimensions[k]) d[k] += box_dimensions[k];
-                }
+                // proper triclinic minimum image
+                d = box.minimumImage(d);
 
                 real_t distance = d.norm() - (r[i] + r[j]);
+
                 if (distance < r_verlet)
                     neighbor_list[i].emplace_back(j);
             }
